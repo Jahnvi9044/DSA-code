@@ -1,84 +1,72 @@
-package LinkedList1;
 
-import java.util.*;
 
 public class MergeSort {
-    public static void main(String[] args)
-    {  LinkedListUse3 ob=new LinkedListUse3();
-        Node<Integer> head=ob.takeinput();
-        head=mergeSort(head,null);
-        ob.print(head);
 
+    public static void main(String[] args) {
+       int[] a={2, 5, 6, 3, 1};
+        divide(0,4,a);
+        for(int i=0;i<5;i++)
+          System.out.print(" " +a[i]);
     }
-    public static Node<Integer> mergeSort(Node<Integer> head ,Node<Integer> mid)
+    public static void divide(int l,int r,int[] arr)
     {
-        if(head!=null)
-        {  mid=midPoint(head);
-            mergeSort(head.next,mid);
-            mergeSort(mid.next,null);
-            head=merge(head,mid);
+        if(l<r)
+        {
+            int mid=(l+r)/2;
+            divide(l,mid,arr);
+            divide(mid+1,r,arr);
+
+            merge(l,mid,r,arr);
         }
-        return head;
 
     }
-    public static Node<Integer> midPoint(Node<Integer> head)
-    {  Node<Integer> fast=head,slow=head;
-
-        if(head==null)
-            return null;
-        while(fast.next!=null&&fast.next.next!=null)
+    public static void merge ( int l, int m, int r,int[] arr)
         {
-            fast=fast.next.next;
-            slow=slow.next;
+            // Find sizes of two subarrays to be merged
+            int n1 = m - l + 1;
+            int n2 = r - m;
 
-        }
-        //  System.out.println(slow);
-        //Your code goes here
-        return slow;
-    }
+            /* Create temp arrays */
+            int L[] = new int[n1];
+            int R[] = new int[n2];
 
-    public static Node<Integer> merge(Node<Integer> head1, Node<Integer> head2)
-    {
+            /*Copy data to temp arrays*/
+            for (int i = 0; i < n1; ++i)
+                L[i] = arr[l + i];
+            for (int j = 0; j < n2; ++j)
+                R[j] = arr[m + 1 + j];
 
-        if(head1==null&&head2==null)
-            return null;
-        Node<Integer> t3,t1=head1,t2=head2;
-        if(t1!=null && t2==null)
-            return t1;
-        if(t2!=null && t1==null)
-            return t2;
-        if(head1.data<head2.data)
-        {
-            t3=head1;
-            t1=head1.next;
-        }
-        else
-        {
-            t3=head2;
-            t2=head2.next;
-        }
-        while(t1!=null  &&  t2!=null)
-        {
-            if(t1.data<t2.data)
-            {   t3.next=t1;
-                t1=t1.next;
-                t3=t3.next;
+            /* Merge the temp arrays */
+
+            // Initial indexes of first and second subarrays
+            int i = 0, j = 0;
+
+            // Initial index of merged subarray array
+            int k = l;
+            while (i < n1 && j < n2) {
+                if (L[i] <= R[j]) {
+                    arr[k] = L[i];
+                    i++;
+                } else {
+                    arr[k] = R[j];
+                    j++;
+                }
+                k++;
             }
-            else
-            {   t3.next=t2;
-                t2=t2.next;
-                t3=t3.next;
+
+            /* Copy remaining elements of L[] if any */
+            while (i < n1) {
+                arr[k] = L[i];
+                i++;
+                k++;
+            }
+
+            /* Copy remaining elements of R[] if any */
+            while (j < n2) {
+                arr[k] = R[j];
+                j++;
+                k++;
             }
         }
-        if(t1!=null )
-        { t3.next=t1;
-        }
-        if(t2!=null )
-        { t3.next=t2;
 
-        }
-        Node<Integer> head=(head1.data<head2.data)?head1:head2;
-        return head;
     }
-
-}
